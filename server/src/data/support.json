@@ -1,0 +1,30 @@
+[
+  {
+    "id": "sup-01",
+    "recordId": "TICKET-APAC-4412",
+    "customer": "Tokyu Retail Global",
+    "category": "Billing Friction & Invoice Discrepancy",
+    "priority": "P2 - High",
+    "timestamp": "2026-08-10",
+    "signal": "APAC billing-related tickets increased 37%",
+    "text": "Invoice generation failed to reflect multi-currency tax exemptions for Japan entity.",
+    "relevance": "MEDIUM",
+    "relevanceScore": 54,
+    "hypothesisId": "hyp-billing-issues",
+    "contradictionNote": "Billing incidents affected only 6% of total APAC accounts, weakening billing as primary systemic cause."
+  },
+  {
+    "id": "sup-02",
+    "recordId": "TICKET-APAC-4480",
+    "customer": "Harbor Auto Supply",
+    "category": "ERP Integration Sync",
+    "priority": "P1 - Critical",
+    "timestamp": "2026-08-04",
+    "signal": "OAuth token timeout on legacy ERP integration",
+    "text": "Scheduled batch sync failed repeatedly on connector v3.2, delaying automated inventory reports.",
+    "relevance": "HIGH",
+    "relevanceScore": 88,
+    "hypothesisId": "hyp-renewal-decline",
+    "contradictionNote": "Directly triggered renewal hold during July-August review window."
+  }
+]

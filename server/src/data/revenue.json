@@ -1,0 +1,21 @@
+{
+  "kpi": "Revenue",
+  "company": "NovaCommerce",
+  "unit": "$M",
+  "currency": "USD",
+  "period": "August 2026",
+  "historicalSeries": [
+    { "month": "Sep 25", "actual": 5.12, "expected": 5.10, "minExpected": 4.95, "maxExpected": 5.25 },
+    { "month": "Oct 25", "actual": 5.18, "expected": 5.15, "minExpected": 5.00, "maxExpected": 5.30 },
+    { "month": "Nov 25", "actual": 5.22, "expected": 5.18, "minExpected": 5.05, "maxExpected": 5.32 },
+    { "month": "Dec 25", "actual": 5.20, "expected": 5.20, "minExpected": 5.05, "maxExpected": 5.35 },
+    { "month": "Jan 26", "actual": 5.26, "expected": 5.22, "minExpected": 5.10, "maxExpected": 5.38 },
+    { "month": "Feb 26", "actual": 5.24, "expected": 5.23, "minExpected": 5.10, "maxExpected": 5.40 },
+    { "month": "Mar 26", "actual": 5.28, "expected": 5.25, "minExpected": 5.12, "maxExpected": 5.42 },
+    { "month": "Apr 26", "actual": 5.30, "expected": 5.26, "minExpected": 5.14, "maxExpected": 5.44 },
+    { "month": "May 26", "actual": 5.25, "expected": 5.27, "minExpected": 5.15, "maxExpected": 5.45 },
+    { "month": "Jun 26", "actual": 5.28, "expected": 5.28, "minExpected": 5.15, "maxExpected": 5.45 },
+    { "month": "Jul 26", "actual": 5.25, "expected": 5.28, "minExpected": 5.15, "maxExpected": 5.45 },
+    { "month": "Aug 26", "actual": 4.82, "expected": 5.25, "minExpected": 5.15, "maxExpected": 5.35, "isAnomaly": true, "label": "August Anomaly: $4.82M (-8.2%)" }
+  ]
+}

@@ -1,0 +1,13 @@
+[
+  {
+    "id": "mkt-01",
+    "source": "Gartner Market Alert",
+    "timestamp": "2026-08-12",
+    "signal": "Competitor (CloudApex) launched 12% cheaper promotional pricing tier in APAC",
+    "text": "CloudApex announced promotional aggressive pricing aimed at enterprise commerce platforms across Japan and Australia on August 12.",
+    "relevance": "MEDIUM",
+    "relevanceScore": 63,
+    "hypothesisId": "hyp-competitor-price",
+    "temporalAnalysis": "CONTRADICTORY: NovaCommerce revenue drop started Aug 01, 11 days BEFORE CloudApex launched pricing."
+  }
+]

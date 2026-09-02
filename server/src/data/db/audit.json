@@ -1,0 +1,46 @@
+[
+  {
+    "id": "AUD-1788320479230-515",
+    "timestamp": "2026-09-02T03:41:19.230Z",
+    "user": "Alex Morgan",
+    "role": "Data Analyst",
+    "kpi": "Revenue",
+    "dataAccessed": "new_product.csv",
+    "analysisType": "Full 17-Stage Pipeline Execution",
+    "actionTaken": "Executed Analysis inv-sparse-03",
+    "policyEnforced": "Compliant"
+  },
+  {
+    "id": "AUD-1788320479208-632",
+    "timestamp": "2026-09-02T03:41:19.208Z",
+    "user": "Alex Morgan",
+    "role": "Data Analyst",
+    "kpi": "Revenue",
+    "dataAccessed": "low_confidence.csv",
+    "analysisType": "Full 17-Stage Pipeline Execution",
+    "actionTaken": "Executed Analysis inv-ambiguous-02",
+    "policyEnforced": "Compliant"
+  },
+  {
+    "id": "AUD-1788320479191-487",
+    "timestamp": "2026-09-02T03:41:19.191Z",
+    "user": "Alex Morgan",
+    "role": "Data Analyst",
+    "kpi": "Revenue",
+    "dataAccessed": "sales.csv",
+    "analysisType": "Full 17-Stage Pipeline Execution",
+    "actionTaken": "Executed Analysis inv-novacommerce-01",
+    "policyEnforced": "Compliant"
+  },
+  {
+    "id": "AUD-1788320405957-286",
+    "timestamp": "2026-09-02T03:40:05.957Z",
+    "user": "Alex Morgan",
+    "role": "Data Analyst",
+    "kpi": "Revenue",
+    "dataAccessed": "sales.csv",
+    "analysisType": "Full 17-Stage Pipeline Execution",
+    "actionTaken": "Executed Analysis INV-5884",
+    "policyEnforced": "Compliant"
+  }
+]

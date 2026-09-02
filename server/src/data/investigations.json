@@ -1,0 +1,132 @@
+[
+  {
+    "id": "inv-novacommerce-01",
+    "kpi": "Revenue",
+    "title": "August 2026 Revenue Contraction (-8.2%)",
+    "company": "NovaCommerce",
+    "period": "Aug 01 – Aug 31, 2026",
+    "currentValue": "$4.82M",
+    "expectedValue": "$5.25M",
+    "changePct": -8.2,
+    "severity": "HIGH",
+    "anomalyScore": 94,
+    "confidenceScore": 87,
+    "confidenceLevel": "HIGH CONFIDENCE",
+    "primaryDriver": "APAC Enterprise Renewal Decline",
+    "evidenceCoveragePct": 78,
+    "dataCompletenessPct": 84,
+    "abstentionState": false,
+    "workflowStages": [
+      { "step": "01", "name": "Detect", "status": "COMPLETED", "summary": "Time-series anomaly flagged ($4.82M vs $5.25M baseline, Z = -3.42)" },
+      { "step": "02", "name": "Decompose", "status": "COMPLETED", "summary": "Isolated APAC region (62.2% contribution) and Enterprise renewal accounts" },
+      { "step": "03", "name": "Investigate", "status": "COMPLETED", "summary": "Retrieved 16 cross-source signals across CRM, Zendesk, Feedback & Market" },
+      { "step": "04", "name": "Validate", "status": "COMPLETED", "summary": "Ranked 3 hypotheses; validated temporal precedence and contradictory facts" },
+      { "step": "05", "name": "Explain", "status": "COMPLETED", "summary": "Generated traceable AI narrative & interactive root-cause relationship graph" },
+      { "step": "06", "name": "Act", "status": "COMPLETED", "summary": "Derived 3 prioritized, evidence-linked actions with owners and telemetry" }
+    ],
+    "temporalTimeline": [
+      { "date": "Aug 01, 2026", "event": "Revenue starts decelerating in APAC region", "type": "KPI_MOVEMENT", "classification": "BASELINE_BREACH" },
+      { "date": "Aug 05, 2026", "event": "APAC enterprise renewal pipeline drops -21% in CRM", "type": "CRM_SIGNAL", "classification": "SUPPORTING (Preceded KPI drop by 10 days)" },
+      { "date": "Aug 10, 2026", "event": "Zendesk P1 integration & billing tickets spike +37%", "type": "SUPPORT_SIGNAL", "classification": "SUPPORTING (Co-occurring friction)" },
+      { "date": "Aug 12, 2026", "event": "Competitor (CloudApex) launches 12% promotional pricing", "type": "MARKET_SIGNAL", "classification": "CONTRADICTORY (Occurred 11 days after revenue drop began)" },
+      { "date": "Aug 15, 2026", "event": "Revenue breach reaches statistical threshold of -8.2%", "type": "ANOMALY_TRIGGER", "classification": "HIGH_MATERIALITY_ALERT" }
+    ],
+    "personaNarratives": {
+      "executive": {
+        "persona": "Executive",
+        "headline": "August Revenue Decreased 8.2% ($4.82M vs $5.25M), Driven by APAC Enterprise Renewals",
+        "story": "Revenue declined 8.2% ($4.82M vs expected $5.25M), primarily driven by APAC enterprise renewals. The APAC enterprise renewal pipeline fell 21% starting August 1st, accounting for an estimated 5.1 percentage points (62.2%) of the global contraction. The strongest supported root cause is renewal friction associated with local ERP connector timeouts (87% confidence). A competitor launched a promotional 12% discount on August 12th, but our revenue drop began 11 days earlier, indicating internal renewal friction was the primary initiator. Recommended executive action is to deploy solutions engineering SWAT teams to the top 10 stalled APAC accounts.",
+        "keyImpact": "$430,000 net ARR loss ($267,460 in APAC)",
+        "confidence": "HIGH CONFIDENCE (87%)",
+        "topAction": "Authorize executive concessions and deploy technical SWAT team to APAC accounts."
+      },
+      "sales": {
+        "persona": "Sales Manager",
+        "headline": "APAC Enterprise Renewal Pipeline Down 21% Across 14 Key Accounts",
+        "story": "APAC Enterprise renewal bookings stalled significantly in August, with 14 key annual contract renewals delayed or blocked ($215K pipeline at risk). Sales rep call logs in Salesforce indicate accounts like Tokyu Retail and Sydney Logistics Group encountered connector handshake failures during their sandbox renewal verification. While CloudApex reached out with discounted quotes mid-month, reps report customers prefer NovaCommerce functionality if connector reliability is resolved immediately.",
+        "keyImpact": "14 Stalled Renewals | $215K Enterprise ARR at Risk",
+        "confidence": "HIGH CONFIDENCE (87%)",
+        "topAction": "Schedule urgent sales engineering pairing sessions with APAC account reps."
+      },
+      "product": {
+        "persona": "Product Manager",
+        "headline": "ERP Connector v3.2 OAuth Timeouts Correlate with Enterprise Deal Stalls",
+        "story": "Telemetry and Zendesk logs confirm that Core Commerce Software usage experienced a surge in OAuth handshake timeouts on the v3.2 connector starting August 4th. Zendesk tickets tagged with ERP sync failures jumped +37%. Enterprise accounts attempting high-throughput batch synchronizations encountered HTTP 401 error cascades, causing IT buyers to hold renewal sign-offs. Releasing patch v3.2.1 to stabilize OAuth token renewal will directly resolve the primary blocker.",
+        "keyImpact": "+37% P1/P2 Connector Incident Tickets",
+        "confidence": "HIGH CONFIDENCE (87%)",
+        "topAction": "Prioritize connector patch v3.2.1 sprint to resolve OAuth token renewal timeouts."
+      },
+      "analyst": {
+        "persona": "Data Analyst",
+        "headline": "Empirical Decomposition: Z-Score -3.42, Multi-Source Triangulation & Causal Limits",
+        "story": "August revenue of $4.82M deviated significantly from the Holt-Winters ARIMA forecast baseline of $5.25M (Z = -3.42, p < 0.001). Hierarchical variance decomposition isolates APAC Enterprise software renewals as contributing 62.2% ($267.5K) of the total variance. Cross-source temporal analysis confirms precedence (Aug 01 pipeline drop → Aug 10 ticket surge → Aug 15 anomaly breach). The competitor hypothesis was downgraded to 63% due to negative temporal precedence (competitor discount launched on Aug 12, after the drop began).",
+        "keyImpact": "Z-Score: -3.42 (p < 0.001) | Method: ARIMA + Contribution Waterfall",
+        "confidence": "HIGH CONFIDENCE (87%)",
+        "topAction": "Audit gateway error telemetry to close remaining 16% missing telemetry gap."
+      }
+    },
+    "rootCauseGraph": {
+      "nodes": [
+        { "id": "node-kpi", "label": "Revenue ↓ 8.2%", "type": "KPI", "x": 100, "y": 200, "color": "#EF4444" },
+        { "id": "node-apac", "label": "APAC Revenue ↓ 11%", "type": "REGION", "x": 300, "y": 200, "color": "#F59E0B" },
+        { "id": "node-ent", "label": "Enterprise Segment", "type": "SEGMENT", "x": 500, "y": 140, "color": "#6366F1" },
+        { "id": "node-ren", "label": "Renewal Rate ↓ 14%", "type": "METRIC", "x": 700, "y": 140, "color": "#EC4899" },
+        { "id": "node-pipe", "label": "CRM Pipeline ↓ 21%", "type": "PIPELINE", "x": 900, "y": 140, "color": "#8B5CF6" },
+        { "id": "node-sup", "label": "Support Tickets ↑ 37%", "type": "SUPPORT", "x": 700, "y": 280, "color": "#F97316" },
+        { "id": "node-comp", "label": "Competitor Pricing -12%", "type": "MARKET", "x": 500, "y": 320, "color": "#06B6D4" },
+        { "id": "node-hyp-1", "label": "Hypothesis: Renewal Decline (87%)", "type": "HYPOTHESIS", "x": 750, "y": 60, "color": "#10B981" }
+      ],
+      "edges": [
+        { "source": "node-apac", "target": "node-kpi", "label": "contributes to (62%)", "type": "CONTRIBUTES" },
+        { "source": "node-ent", "target": "node-apac", "label": "contributes to (80%)", "type": "CONTRIBUTES" },
+        { "source": "node-ren", "target": "node-ent", "label": "correlates with", "type": "CORRELATES" },
+        { "source": "node-pipe", "target": "node-ren", "label": "temporally precedes", "type": "PRECEDES" },
+        { "source": "node-pipe", "target": "node-hyp-1", "label": "strongly supports", "type": "SUPPORTS" },
+        { "source": "node-sup", "target": "node-apac", "label": "co-occurs with", "type": "CORRELATES" },
+        { "source": "node-comp", "target": "node-apac", "label": "partially supports (late)", "type": "WEAK_SUPPORT" }
+      ]
+    },
+    "recommendations": [
+      {
+        "id": "rec-01",
+        "priority": "HIGH",
+        "title": "Deploy Dedicated Technical SWAT Team to Top 10 APAC Renewal Accounts",
+        "description": "Assign senior integration architects directly to the 10 stalled enterprise accounts in APAC to manually resolve connector handshake bottlenecks within 72 hours.",
+        "expectedImpact": "Estimated recovery of $140,000–$180,000 in delayed Q3 renewal ARR.",
+        "owner": "Sales Operations & Customer Success",
+        "controllability": "High",
+        "confidence": "High (87%)",
+        "monitoring": ["OAuth Handshake Error Rate", "Weekly APAC Closed Renewal ARR"]
+      },
+      {
+        "id": "rec-02",
+        "priority": "HIGH",
+        "title": "Release Emergency ERP Connector Patch v3.2.1",
+        "description": "Deploy backend patch fixing automated OAuth token renewal timeouts on SAP/Oracle ERP integrations in Core Commerce Software.",
+        "expectedImpact": "Eliminates 37% ticket volume spike and unblocks sandbox pilot passes.",
+        "owner": "Product Engineering",
+        "controllability": "High",
+        "confidence": "High (89%)",
+        "monitoring": ["Zendesk P1 Connector Tickets", "API Sync Success Rate"]
+      },
+      {
+        "id": "rec-03",
+        "priority": "MEDIUM",
+        "title": "Publish APAC Competitive Battlecard vs. CloudApex",
+        "description": "Arm sales representatives with verified total-cost-of-ownership (TCO) benchmarks highlighting NovaCommerce's superior throughput and native compliance.",
+        "expectedImpact": "Mitigates win-rate leakage against CloudApex's 12% promotional discount.",
+        "owner": "Product Marketing & Strategy",
+        "controllability": "Moderate",
+        "confidence": "Moderate (63%)",
+        "monitoring": ["Competitive Loss Reason Rate", "Discount Approval Rate"]
+      }
+    ],
+    "dataLineage": [
+      { "step": 1, "system": "PostgreSQL Billing Database", "operation": "Daily Recognized Revenue Aggregation", "details": "SUM(net_sales) across all global customer accounts" },
+      { "step": 2, "system": "dbt Transformation Layer", "operation": "Multidimensional Regional Partitioning", "details": "Calculates variance by Region (APAC, NA, LATAM, EMEA)" },
+      { "step": 3, "system": "Segment & Cohort Analysis", "operation": "Customer Tier & Product Filtering", "details": "Isolates Enterprise Software Renewal contracts" },
+      { "step": 4, "system": "Salesforce CRM & Zendesk API", "operation": "Unstructured Signal Triangulation", "details": "Matches deal post-mortems with P1 support ticket timestamps" },
+      { "step": 5, "system": "MarketTrace Analytical Engine", "operation": "Temporal Precedence & Hypothesis Validation", "details": "Derives 87% confidence for Renewal Decline explanation" }
+    ]
+  }
+]

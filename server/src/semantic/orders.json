@@ -1,0 +1,28 @@
+{
+  "name": "Orders",
+  "kpiId": "kpi-orders",
+  "definition": "Total volume of completed sales transactions",
+  "formula": "COUNT(transaction_id)",
+  "grain": "transaction",
+  "dimensions": [
+    "region",
+    "product",
+    "channel"
+  ],
+  "timeDimension": "date",
+  "currency": "Units",
+  "unit": "Orders",
+  "materialityThreshold": 5.0,
+  "alertThreshold": 2.0,
+  "allowedRoles": [
+    "executive",
+    "sales",
+    "analyst",
+    "product"
+  ],
+  "controllableLevers": [
+    "Demand generation marketing campaigns",
+    "Checkout & conversion funnel optimization",
+    "Sales outreach volume"
+  ]
+}

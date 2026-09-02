@@ -1,0 +1,53 @@
+[
+  {
+    "id": "crm-01",
+    "recordId": "OPP-APAC-8901",
+    "account": "Tokyu Retail Global",
+    "region": "APAC",
+    "segment": "Enterprise",
+    "dealValue": "$120,000 ARR",
+    "stage": "Delayed Renewal",
+    "timestamp": "2026-08-05",
+    "signal": "APAC enterprise renewal pipeline dropped 21%",
+    "salesRep": "Kenji Sato",
+    "text": "Customer delayed annual contract renewal citing internal budget restructuring and requests for modular billing.",
+    "relevance": "HIGH",
+    "relevanceScore": 95,
+    "hypothesisId": "hyp-renewal-decline",
+    "temporalClassification": "SUPPORTING (Preceded KPI drop by 15 days)"
+  },
+  {
+    "id": "crm-02",
+    "recordId": "OPP-APAC-8944",
+    "account": "Sydney Logistics Group",
+    "region": "APAC",
+    "segment": "Enterprise",
+    "dealValue": "$95,000 ARR",
+    "stage": "Lost Renewal",
+    "timestamp": "2026-08-08",
+    "signal": "Enterprise renewal rate fell 14% MoM",
+    "salesRep": "Sarah Miller",
+    "text": "Buyer stalled renewal past July 31st deadline due to pending ERP connector stabilization.",
+    "relevance": "HIGH",
+    "relevanceScore": 92,
+    "hypothesisId": "hyp-renewal-decline",
+    "temporalClassification": "SUPPORTING (Preceded KPI drop by 12 days)"
+  },
+  {
+    "id": "crm-03",
+    "recordId": "OPP-APAC-9012",
+    "account": "Singapore FinTech Corp",
+    "region": "APAC",
+    "segment": "Enterprise",
+    "dealValue": "$85,000 ARR",
+    "stage": "Competitor Evaluation",
+    "timestamp": "2026-08-16",
+    "signal": "Prospect mentioned competitor CloudApex pricing",
+    "salesRep": "Wei Zhang",
+    "text": "Customer referenced CloudApex 12% promotional discount, but noted negotiation began mid-August after initial delay.",
+    "relevance": "MEDIUM",
+    "relevanceScore": 68,
+    "hypothesisId": "hyp-competitor-price",
+    "temporalClassification": "WEAK / CONTRADICTORY (Mention occurred AFTER initial revenue deceleration)"
+  }
+]

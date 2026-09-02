@@ -1,0 +1,70 @@
+[
+  {
+    "id": "hyp-renewal-decline",
+    "name": "APAC Enterprise Renewal Decline",
+    "confidence": 87,
+    "status": "SUPPORTED",
+    "statusBadge": "STRONGEST EXPLANATION (87% CONFIDENCE)",
+    "summary": "Enterprise accounts in APAC delayed or cancelled annual contract renewals due to integration bottlenecks with local ERP stacks.",
+    "evidenceCount": 8,
+    "contradictionCount": 0,
+    "temporalAlignment": "STRONG: Renewal pipeline fell starting Aug 01, preceding revenue anomaly by 15 days",
+    "magnitudeImpact": "62.2% of total global revenue contraction ($267.5K)",
+    "supportingSignals": [
+      "CRM renewal pipeline dropped -21% in APAC Enterprise segment",
+      "Enterprise annual contract renewal rate dropped -14% MoM",
+      "APAC regional revenue contracted -11% MoM ($267K loss)",
+      "Zendesk P1 connector timeout tickets surged +37% in early August"
+    ],
+    "contradictorySignals": [],
+    "missingSignals": [
+      "Account-level post-loss executive interview transcripts",
+      "Gateway connector detailed packet telemetry"
+    ]
+  },
+  {
+    "id": "hyp-competitor-price",
+    "name": "Competitor Price Reduction (CloudApex)",
+    "confidence": 63,
+    "status": "PARTIALLY SUPPORTED",
+    "statusBadge": "MODERATE EXPLANATION (63% CONFIDENCE)",
+    "summary": "Primary rival CloudApex announced a 12% promotional discount in APAC, accelerating late-August deal negotiations.",
+    "evidenceCount": 5,
+    "contradictionCount": 2,
+    "temporalAlignment": "CONTRADICTORY: CloudApex announced discount on Aug 12, whereas NovaCommerce revenue drop started Aug 01",
+    "magnitudeImpact": "Accelerated negotiations for 3 late-stage deals ($36K impact)",
+    "supportingSignals": [
+      "Competitor launched 12% promotional pricing plan on Aug 12",
+      "3 enterprise prospects mentioned competitor discount in sales calls"
+    ],
+    "contradictorySignals": [
+      "Revenue deceleration commenced 11 days prior to competitor promotional launch",
+      "Win-loss analysis confirms only 2 lost deals cited price as deciding factor"
+    ],
+    "missingSignals": [
+      "Competitor APAC market share quarterly report"
+    ]
+  },
+  {
+    "id": "hyp-billing-issues",
+    "name": "Billing System Issues & Invoice Errors",
+    "confidence": 41,
+    "status": "WEAK",
+    "statusBadge": "WEAK EXPLANATION (41% CONFIDENCE)",
+    "summary": "Invoicing disputes and VAT tax calculation errors temporarily stalled payment collections.",
+    "evidenceCount": 3,
+    "contradictionCount": 3,
+    "temporalAlignment": "WEAK: Billing support tickets spiked around Aug 10, mid-way through the anomaly",
+    "magnitudeImpact": "Affected accounts represent only $42K in deferred cash collection",
+    "supportingSignals": [
+      "Billing-related support tickets increased +37% in mid-August"
+    ],
+    "contradictorySignals": [
+      "Billing incidents affected only 6% of active APAC enterprise accounts",
+      "Invoicing errors resulted in temporary payment delays rather than contractual churn"
+    ],
+    "missingSignals": [
+      "Payment gateway webhook error rates"
+    ]
+  }
+]

@@ -1,0 +1,11 @@
+ticket_id,date,region,category,severity,status,customer_segment,description
+TK-8401,2026-07-10,APAC,Integration,P1 - Critical,Open,Enterprise,"OAuth token timeout during daily enterprise SAP ERP sync for Tokyo Digital Corp."
+TK-8405,2026-07-14,APAC,Integration,P1 - Critical,Escalated,Enterprise,"Sync connector latency exceeds 45s threshold causing batch job failure in Singapore instance."
+TK-8412,2026-07-20,APAC,Integration,P2 - High,In Progress,Enterprise,"APAC data connector v4.2 memory leak causes overnight pipeline disconnects."
+TK-8418,2026-07-26,APAC,Billing,P3 - Medium,Resolved,Mid-Market,"Invoice currency exchange rate display query for AUD transaction."
+TK-8422,2026-08-01,APAC,Integration,P1 - Critical,Open,Enterprise,"Critical: Jakarta Enterprise ERP connector disconnect during financial month-end closing."
+TK-8429,2026-08-06,North America,UI/UX,P3 - Medium,Resolved,SMB,"Dashboard report export button alignment issue on Safari."
+TK-8433,2026-08-10,APAC,Integration,P1 - Critical,Escalated,Enterprise,"Sydney Financial Group reporting repeated SSL handshake drops with on-prem Oracle DB."
+TK-8440,2026-08-15,Europe,Performance,P2 - High,Resolved,Enterprise,"Analytics query cache warming delayed after scheduled maintenance."
+TK-8448,2026-08-21,APAC,Integration,P1 - Critical,Open,Enterprise,"APAC Enterprise support ticket volume for connector timeouts increased 37% month-over-month."
+TK-8452,2026-08-28,APAC,Performance,P2 - High,In Progress,Enterprise,"CloudSuite API gateway rate limiting triggering false 429 errors for high-volume enterprise accounts."

@@ -1,0 +1,7 @@
+feedback_id,date,region,product,rating,sentiment,text
+FB-501,2026-07-16,APAC,CloudSuite,2,Negative,"CloudSuite v4.2 broke our SAP ERP synchronization. We cannot complete our financial reconciliation."
+FB-502,2026-07-25,APAC,CloudSuite,1,Negative,"Support takes days to respond to connector timeout tickets. Our upcoming enterprise renewal is on hold."
+FB-503,2026-08-04,North America,AnalyticsPro,5,Positive,"AnalyticsPro query performance has improved significantly. Great ROI for our analytics team."
+FB-504,2026-08-12,APAC,SecurityShield,4,Positive,"SecurityShield works well across all APAC branches, no complaints."
+FB-505,2026-08-16,APAC,CloudSuite,2,Negative,"Saw CloudApex offering discounts, but honestly if NovaCommerce just fixed the ERP sync bug we would stay."
+FB-506,2026-08-22,Europe,CloudSuite,4,Neutral,"Renewal pricing is slightly higher than expected, but product stability is solid."

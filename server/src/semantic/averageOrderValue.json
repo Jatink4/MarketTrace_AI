@@ -1,0 +1,27 @@
+{
+  "name": "Average Order Value",
+  "kpiId": "kpi-aov",
+  "definition": "Average revenue realized per completed transaction or contract",
+  "formula": "SUM(revenue) / COUNT(transaction_id)",
+  "grain": "transaction",
+  "dimensions": [
+    "region",
+    "product",
+    "channel"
+  ],
+  "timeDimension": "date",
+  "currency": "USD",
+  "unit": "$",
+  "materialityThreshold": 6.0,
+  "alertThreshold": 3.0,
+  "allowedRoles": [
+    "executive",
+    "sales",
+    "analyst"
+  ],
+  "controllableLevers": [
+    "Cross-selling and add-on bundling",
+    "Volume discounting tiers",
+    "Pricing packaging updates"
+  ]
+}

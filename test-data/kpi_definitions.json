@@ -1,0 +1,116 @@
+[
+  {
+    "name": "Revenue",
+    "kpiId": "kpi-revenue",
+    "definition": "Total recognized sales revenue across all regions and products",
+    "formula": "SUM(revenue)",
+    "grain": "transaction",
+    "dimensions": [
+      "region",
+      "product",
+      "customer_segment",
+      "channel"
+    ],
+    "timeDimension": "date",
+    "currency": "USD",
+    "unit": "$",
+    "materialityThreshold": 5,
+    "alertThreshold": 2,
+    "allowedRoles": [
+      "executive",
+      "sales",
+      "analyst",
+      "product"
+    ]
+  },
+  {
+    "name": "Conversion Rate",
+    "kpiId": "kpi-conversion",
+    "definition": "Percentage of qualified enterprise opportunities that close as won deals",
+    "formula": "SUM(converted_deals) / SUM(total_opportunities) * 100",
+    "grain": "opportunity",
+    "dimensions": [
+      "region",
+      "customer_segment",
+      "channel"
+    ],
+    "timeDimension": "date",
+    "currency": "%",
+    "unit": "%",
+    "materialityThreshold": 8,
+    "alertThreshold": 4,
+    "allowedRoles": [
+      "executive",
+      "sales",
+      "analyst"
+    ]
+  },
+  {
+    "name": "Customer Churn",
+    "kpiId": "kpi-churn",
+    "definition": "Percentage of existing recurring contract value churned or not renewed",
+    "formula": "SUM(churned_value) / SUM(renewed_base_value) * 100",
+    "grain": "account",
+    "dimensions": [
+      "region",
+      "product",
+      "customer_segment"
+    ],
+    "timeDimension": "date",
+    "currency": "%",
+    "unit": "%",
+    "materialityThreshold": 5,
+    "alertThreshold": 3,
+    "allowedRoles": [
+      "executive",
+      "sales",
+      "analyst",
+      "product"
+    ]
+  },
+  {
+    "name": "Average Order Value",
+    "kpiId": "kpi-aov",
+    "definition": "Average revenue realized per completed transaction or contract",
+    "formula": "SUM(revenue) / COUNT(transaction_id)",
+    "grain": "transaction",
+    "dimensions": [
+      "region",
+      "product",
+      "channel"
+    ],
+    "timeDimension": "date",
+    "currency": "USD",
+    "unit": "$",
+    "materialityThreshold": 6,
+    "alertThreshold": 3,
+    "allowedRoles": [
+      "executive",
+      "sales",
+      "analyst"
+    ]
+  },
+  {
+    "name": "Orders",
+    "kpiId": "kpi-orders",
+    "definition": "Total volume of completed sales transactions",
+    "formula": "COUNT(transaction_id)",
+    "grain": "transaction",
+    "dimensions": [
+      "region",
+      "product",
+      "channel"
+    ],
+    "timeDimension": "date",
+    "currency": "Units",
+    "unit": "Orders",
+    "materialityThreshold": 5,
+    "alertThreshold": 2,
+    "allowedRoles": [
+      "executive",
+      "sales",
+      "analyst",
+      "product"
+    ]
+  }
+]

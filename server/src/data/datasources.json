@@ -1,0 +1,57 @@
+[
+  {
+    "id": "ds-crm",
+    "name": "Salesforce CRM",
+    "category": "Sales & Pipeline",
+    "status": "Connected",
+    "records": "12,842 opportunities",
+    "lastSynced": "5 min ago",
+    "grain": "Opportunity-level",
+    "quality": "96.4%",
+    "description": "Enterprise opportunity stages, win/loss logs, sales representative notes, and renewal pipelines."
+  },
+  {
+    "id": "ds-sales",
+    "name": "PostgreSQL Sales Database",
+    "category": "Transactions & Billing",
+    "status": "Connected",
+    "records": "48,291 transactions",
+    "lastSynced": "12 min ago",
+    "grain": "Transaction-level",
+    "quality": "99.8%",
+    "description": "Audited billing ledger, recognized net revenue, contract renewal line-items, and refund transactions."
+  },
+  {
+    "id": "ds-support",
+    "name": "Zendesk Enterprise Support",
+    "category": "Customer Operations",
+    "status": "Connected",
+    "records": "18,402 tickets",
+    "lastSynced": "2 min ago",
+    "grain": "Ticket-level",
+    "quality": "94.2%",
+    "description": "Incoming incident tickets, priority ratings (P1/P2), category taxonomy, and customer sentiment logs."
+  },
+  {
+    "id": "ds-feedback",
+    "name": "Customer Feedback & Reviews",
+    "category": "Voice of Customer",
+    "status": "Connected",
+    "records": "7,284 reviews & NPS",
+    "lastSynced": "1 hr ago",
+    "grain": "Feedback item",
+    "quality": "91.0%",
+    "description": "G2, Capterra, and in-app CSAT survey responses with natural-language text transcripts."
+  },
+  {
+    "id": "ds-market",
+    "name": "Market & Competitor Intelligence",
+    "category": "External Signals",
+    "status": "Connected",
+    "records": "1,294 market signals",
+    "lastSynced": "4 hrs ago",
+    "grain": "Market-week",
+    "quality": "88.5%",
+    "description": "Competitor pricing changes, press releases, regional SaaS macro benchmarks, and industry alerts."
+  }
+]

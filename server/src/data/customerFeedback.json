@@ -1,0 +1,26 @@
+[
+  {
+    "id": "feed-01",
+    "source": "G2 Review",
+    "customer": "Enterprise IT Director, APAC",
+    "timestamp": "2026-08-11",
+    "score": "3.0 / 5.0",
+    "signal": "Renewal negotiation feedback citing integration complexity",
+    "text": "NovaCommerce platform is strong, but renewals are dragged down by integration friction with existing SAP databases in our Asian regional offices.",
+    "relevance": "HIGH",
+    "relevanceScore": 89,
+    "hypothesisId": "hyp-renewal-decline"
+  },
+  {
+    "id": "feed-02",
+    "source": "CSAT In-App Survey",
+    "customer": "APAC Operations Lead",
+    "timestamp": "2026-08-14",
+    "score": "2.0 / 5.0",
+    "signal": "Billing portal UX complaints",
+    "text": "Could not download updated PDF invoice for local VAT compliance.",
+    "relevance": "LOW",
+    "relevanceScore": 38,
+    "hypothesisId": "hyp-billing-issues"
+  }
+]

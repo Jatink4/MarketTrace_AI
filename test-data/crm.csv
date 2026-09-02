@@ -1,0 +1,11 @@
+opportunity_id,date,region,customer_segment,stage,deal_value,renewal_status,account_name,sales_rep,notes
+OPP-301,2026-07-15,APAC,Enterprise,Negotiation,180000,Delayed,"Tokyo Digital Corp","Kenji Sato","Account raised severe concerns with custom ERP connector timeouts occurring after v4.2 update. Refusing renewal until resolved."
+OPP-302,2026-07-18,APAC,Enterprise,Under Review,240000,At Risk,"Singapore Telecomm Ltd","Mei Ling","Customer citing frequent daily sync failures and delayed month-end batch jobs. Renewal pipeline probability reduced to 30%."
+OPP-303,2026-07-22,APAC,Enterprise,Negotiation,150000,Delayed,"Sydney Financial Group","David Miller","Renewal stalled. Procurement team demands SLA guarantee for local API connector stability and rebate for downtime."
+OPP-304,2026-07-28,APAC,Enterprise,Lost,120000,Churned,"Seoul Media Systems","Park Ji-sung","Customer chose not to renew annual enterprise tier due to unaddressed ERP integration latency."
+OPP-305,2026-08-03,North America,Enterprise,Closed Won,320000,Renewed,"Apex Global Logistics","Sarah Jenkins","Smooth annual renewal executed. US standard connector operations running without friction."
+OPP-306,2026-08-07,APAC,Enterprise,Escalated,210000,Delayed,"Hong Kong Retail Holdings","William Cheung","Renewal deferred into Q4. Technical leadership requested engineering SWAT team on-site for database synchronization."
+OPP-307,2026-08-11,Europe,Enterprise,Closed Won,190000,Renewed,"Nordic Bank Solutions","Lars Lindqvist","Renewal completed with minor pricing concessions on analytics add-ons."
+OPP-308,2026-08-14,APAC,Enterprise,Negotiation,175000,At Risk,"Melbourne Logistics Tech","Chloe Adams","Client mentioned competitor CloudApex promotional outreach, but primary renewal blocker remains ERP sync latency."
+OPP-309,2026-08-19,APAC,Mid-Market,Closed Won,45000,Renewed,"Auckland Data Services","Tane Williams","Mid-market package renewed successfully without ERP dependencies."
+OPP-310,2026-08-25,APAC,Enterprise,Under Review,260000,Delayed,"Jakarta Enterprise Group","Budi Santoso","Annual contract renewal delayed pending resolution of Zendesk ticket #TK-8422."

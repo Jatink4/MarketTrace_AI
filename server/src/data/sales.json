@@ -1,0 +1,111 @@
+{
+  "totalVariancePct": -8.2,
+  "totalLossAmount": "$430,000",
+  "regions": [
+    { "name": "APAC", "impactPct": -5.1, "contributionPct": 62.2, "loss": "-$267,460", "isPrimary": true },
+    { "name": "North America", "impactPct": -1.2, "contributionPct": 14.6, "loss": "-$62,780", "isPrimary": false },
+    { "name": "LATAM", "impactPct": -1.1, "contributionPct": 13.4, "loss": "-$57,620", "isPrimary": false },
+    { "name": "Europe", "impactPct": -0.8, "contributionPct": 9.8, "loss": "-$42,140", "isPrimary": false }
+  ],
+  "hierarchyTree": {
+    "id": "root",
+    "name": "NovaCommerce Global Revenue",
+    "changePct": -8.2,
+    "loss": "-$430,000",
+    "sharePct": 100,
+    "children": [
+      {
+        "id": "reg-apac",
+        "name": "APAC Region",
+        "changePct": -11.0,
+        "loss": "-$267,460",
+        "sharePct": 62.2,
+        "isPrimary": true,
+        "children": [
+          {
+            "id": "seg-enterprise",
+            "name": "Enterprise Accounts",
+            "changePct": -16.4,
+            "loss": "-$215,000",
+            "sharePct": 80.4,
+            "children": [
+              {
+                "id": "prod-software",
+                "name": "Core Commerce Software",
+                "changePct": -21.8,
+                "loss": "-$182,000",
+                "sharePct": 84.6,
+                "children": [
+                  {
+                    "id": "type-renewal",
+                    "name": "Annual Contract Renewals",
+                    "changePct": -28.4,
+                    "loss": "-$154,000",
+                    "sharePct": 84.6
+                  },
+                  {
+                    "id": "type-new",
+                    "name": "New License Bookings",
+                    "changePct": -5.2,
+                    "loss": "-$28,000",
+                    "sharePct": 15.4
+                  }
+                ]
+              },
+              {
+                "id": "prod-services",
+                "name": "Professional Services",
+                "changePct": -3.8,
+                "loss": "-$33,000",
+                "sharePct": 15.4
+              }
+            ]
+          },
+          {
+            "id": "seg-midmarket",
+            "name": "Mid-Market Accounts",
+            "changePct": -3.2,
+            "loss": "-$32,460",
+            "sharePct": 12.1
+          },
+          {
+            "id": "seg-smb",
+            "name": "SMB Accounts",
+            "changePct": -2.0,
+            "loss": "-$20,000",
+            "sharePct": 7.5
+          }
+        ]
+      },
+      {
+        "id": "reg-na",
+        "name": "North America",
+        "changePct": -1.8,
+        "loss": "-$62,780",
+        "sharePct": 14.6
+      },
+      {
+        "id": "reg-latam",
+        "name": "LATAM",
+        "changePct": -2.4,
+        "loss": "-$57,620",
+        "sharePct": 13.4
+      },
+      {
+        "id": "reg-emea",
+        "name": "Europe",
+        "changePct": -1.4,
+        "loss": "-$42,140",
+        "sharePct": 9.8
+      }
+    ]
+  },
+  "waterfallDrivers": [
+    { "name": "APAC Renewal Volume", "contributionPct": -4.2, "impact": "-$220K", "type": "negative", "method": "Cohort Analysis" },
+    { "name": "Enterprise Renewal Rate Drop", "contributionPct": -1.8, "impact": "-$94K", "type": "negative", "method": "Retention Cohort" },
+    { "name": "Price Concessions & Match", "contributionPct": -1.1, "impact": "-$58K", "type": "negative", "method": "Discount Matrix" },
+    { "name": "Billing Friction Disputes", "contributionPct": -0.8, "impact": "-$42K", "type": "negative", "method": "Ticket Attribution" },
+    { "name": "Competitor Defections", "contributionPct": -0.7, "impact": "-$36K", "type": "negative", "method": "Win/Loss Log" },
+    { "name": "Organic Expansion (Americas)", "contributionPct": 0.4, "impact": "+$20K", "type": "positive", "method": "Residual Growth" }
+  ]
+}

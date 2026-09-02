@@ -1,0 +1,27 @@
+{
+  "name": "Conversion Rate",
+  "kpiId": "kpi-conversion",
+  "definition": "Percentage of qualified enterprise opportunities that close as won deals",
+  "formula": "SUM(converted_deals) / SUM(total_opportunities) * 100",
+  "grain": "opportunity",
+  "dimensions": [
+    "region",
+    "customer_segment",
+    "channel"
+  ],
+  "timeDimension": "date",
+  "currency": "%",
+  "unit": "%",
+  "materialityThreshold": 8.0,
+  "alertThreshold": 4.0,
+  "allowedRoles": [
+    "executive",
+    "sales",
+    "analyst"
+  ],
+  "controllableLevers": [
+    "Sales qualification criteria",
+    "Proof-of-concept enablement",
+    "Executive sponsor engagement"
+  ]
+}

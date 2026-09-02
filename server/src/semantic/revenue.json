@@ -1,0 +1,30 @@
+{
+  "name": "Revenue",
+  "kpiId": "kpi-revenue",
+  "definition": "Total recognized sales revenue across all regions, products, and customer segments",
+  "formula": "SUM(revenue)",
+  "grain": "transaction",
+  "dimensions": [
+    "region",
+    "product",
+    "customer_segment",
+    "channel"
+  ],
+  "timeDimension": "date",
+  "currency": "USD",
+  "unit": "$",
+  "materialityThreshold": 5.0,
+  "alertThreshold": 2.0,
+  "allowedRoles": [
+    "executive",
+    "sales",
+    "analyst",
+    "product"
+  ],
+  "controllableLevers": [
+    "Customer retention / renewal intervention",
+    "Discounting & pricing guidelines",
+    "Technical support SWAT allocation",
+    "Channel partner co-marketing"
+  ]
+}

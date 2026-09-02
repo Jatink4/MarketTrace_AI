@@ -1,0 +1,28 @@
+{
+  "name": "Customer Churn",
+  "kpiId": "kpi-churn",
+  "definition": "Percentage of existing recurring contract value churned or not renewed",
+  "formula": "SUM(churned_value) / SUM(renewed_base_value) * 100",
+  "grain": "account",
+  "dimensions": [
+    "region",
+    "product",
+    "customer_segment"
+  ],
+  "timeDimension": "date",
+  "currency": "%",
+  "unit": "%",
+  "materialityThreshold": 5.0,
+  "alertThreshold": 3.0,
+  "allowedRoles": [
+    "executive",
+    "sales",
+    "analyst",
+    "product"
+  ],
+  "controllableLevers": [
+    "Dedicated customer success onboarding",
+    "Early warning telemetry alerts",
+    "Executive escalation playbooks"
+  ]
+}

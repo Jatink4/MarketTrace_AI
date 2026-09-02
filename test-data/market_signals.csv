@@ -1,0 +1,4 @@
+event_id,date,region,competitor,event_type,description,impact
+EVT-901,2026-08-12,APAC,CloudApex,Promotional Launch,"CloudApex launched a 12% promotional discount targeting enterprise migrations in APAC region.",Moderate
+EVT-902,2026-08-20,Global,DataVanguard,Product Announcement,"DataVanguard announced AI forecasting feature for Q4 beta.",Low
+EVT-903,2026-07-01,Europe,EuroCloud,Regulatory Compliance,"EU data sovereignty directive implementation update.",Low
