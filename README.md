@@ -65,11 +65,11 @@ Traditional Business Intelligence (Power BI, Tableau, Looker) provides descripti
 ## 🎯 Problem Statement & The Decision Gap
 
 ```
-┌───────────────────────────┐         THE DECISION GAP          ┌───────────────────────────┐
-│     TRADITIONAL B.I.      │    ❌ 80% Manual Investigation     │     BUSINESS DECISION     │
+┌───────────────────────────┐         THE DECISION GAP           ┌───────────────────────────┐
+│     TRADITIONAL B.I.      │    No 80% Manual Investigation     │     BUSINESS DECISION     │
 │    "Revenue fell 8.2%"    │ ═════════════════════════════════> │ "What action do we take?" │
-│   (Descriptive Numbers)   │    ❌ Hallucinating GenAI LLMs    │    (Operational Action)   │
-└───────────────────────────┘    ❌ No Causal Verification      └───────────────────────────┘
+│   (Descriptive Numbers)   │    No Hallucinating GenAI LLMs     │    (Operational Action)   │
+└───────────────────────────┘    No Causal Verification          └───────────────────────────┘
                                               ▲
                                               │
                                  ┌─────────────────────────┐
@@ -93,7 +93,7 @@ The platform provides a guided, interactive 6-stage investigation workflow:
 
 ```
   ┌──────────┐      ┌────────────┐      ┌─────────────┐      ┌──────────┐      ┌─────────┐      ┌─────┐
-  │01 DETECT ├─────>│02DECOMPOSE├─────>│03INVESTIGATE├─────>│04VALIDATE├─────>│05EXPLAIN├─────>│06ACT│
+  │01 DETECT ├─────>│02DECOMPOSE ├─────>│03INVESTIGATE├─────>│04VALIDATE├─────>│05EXPLAIN├─────>│06ACT│
   └──────────┘      └────────────┘      └─────────────┘      └──────────┘      └─────────┘      └─────┘
 ```
 
