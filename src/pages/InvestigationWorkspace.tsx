@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchInvestigation } from '../api/client';
+import { fetchInvestigation, fetchLLMConfig } from '../api/client';
 import { 
   Activity, 
   ArrowLeft, 
@@ -16,7 +16,10 @@ import {
   Layers,
   Sparkles,
   AlertOctagon,
-  Download
+  Download,
+  Cpu,
+  Eye,
+  ListOrdered
 } from 'lucide-react';
 
 import DetectView from '../components/investigation/DetectView';
@@ -30,6 +33,8 @@ import { DataLineageModal } from '../components/investigation/DataLineageModal';
 import { TelemetryModal } from '../components/investigation/TelemetryModal';
 import { MethodologyBanner } from '../components/common/MethodologyBanner';
 import { FeedbackCard } from '../components/investigation/FeedbackCard';
+import { StepByStepAnalysisView } from '../components/investigation/StepByStepAnalysisView';
+import { LLMConfigModal } from '../components/common/LLMConfigModal';
 
 const STAGES = [
   { id: '01', name: 'Detect', component: DetectView },
@@ -50,8 +55,11 @@ export default function InvestigationWorkspace() {
   const [isLoading, setIsLoading] = useState(true);
   const [showLineage, setShowLineage] = useState(false);
   const [showTelemetry, setShowTelemetry] = useState(false);
+  const [showLLMModal, setShowLLMModal] = useState(false);
+  const [llmConfig, setLLMConfig] = useState<any>(null);
   const [selectedRole, setSelectedRole] = useState('Data Analyst');
   const [accessDeniedMessage, setAccessDeniedMessage] = useState<string | null>(null);
+  const [viewMode, setViewMode] = useState<'step_by_step' | 'stage_inspect'>('step_by_step');
 
   const loadInvestigation = (targetId: string, role = selectedRole) => {
     setIsLoading(true);
@@ -72,6 +80,7 @@ export default function InvestigationWorkspace() {
 
   useEffect(() => {
     loadInvestigation(currentAnalysisId, selectedRole);
+    fetchLLMConfig().then(setLLMConfig).catch(() => {});
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, [currentAnalysisId, selectedRole]);
 
@@ -155,49 +164,30 @@ export default function InvestigationWorkspace() {
           </div>
         </div>
 
-        {/* Center: Benchmark Scenario Switcher */}
-        <div className="flex flex-wrap items-center gap-1.5 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs">
+        {/* Right Tools: LLM Settings, Lineage, Telemetry, Role */}
+        <div className="flex items-center gap-2">
+          {/* LLM Engine Setting */}
           <button
-            onClick={() => navigate('/investigation/inv-novacommerce-01')}
-            className={`px-3 py-1 font-bold rounded-lg transition-all ${
-              currentAnalysisId === 'inv-novacommerce-01' ? 'bg-white text-indigo-700 shadow-xs border border-slate-200' : 'text-slate-600 hover:text-slate-900'
-            }`}
+            onClick={() => setShowLLMModal(true)}
+            className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold flex items-center gap-1.5 border border-indigo-200 transition-colors shadow-2xs"
           >
-            🔥 Scenario A (High Conf)
+            <Cpu size={14} className="text-indigo-600" />
+            <span>LLM: {llmConfig?.provider?.toUpperCase() || 'GEMINI'}</span>
           </button>
-          <button
-            onClick={() => navigate('/investigation/inv-ambiguous-02')}
-            className={`px-3 py-1 font-bold rounded-lg transition-all ${
-              currentAnalysisId === 'inv-ambiguous-02' ? 'bg-white text-amber-700 shadow-xs border border-slate-200' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            ⚖️ Scenario B (Abstain)
-          </button>
-          <button
-            onClick={() => navigate('/investigation/inv-sparse-03')}
-            className={`px-3 py-1 font-bold rounded-lg transition-all ${
-              currentAnalysisId === 'inv-sparse-03' ? 'bg-white text-blue-700 shadow-xs border border-slate-200' : 'text-slate-600 hover:text-slate-900'
-            }`}
-          >
-            ⏳ Scenario C (Sparse)
-          </button>
-        </div>
 
-        {/* Right Tools: Lineage, Telemetry, Role, Stepper */}
-        <div className="flex items-center gap-3">
           {/* View Lineage */}
           <button
             onClick={() => setShowLineage(true)}
             className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors"
           >
             <GitCommit size={14} className="text-indigo-600" />
-            <span>View Lineage</span>
+            <span>Lineage</span>
           </button>
 
           {/* Telemetry */}
           <button
             onClick={() => setShowTelemetry(true)}
-            className="px-3 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-bold flex items-center gap-1.5 border border-indigo-200 transition-colors"
+            className="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors"
           >
             <Zap size={14} className="text-indigo-600" />
             <span>Telemetry</span>
@@ -220,80 +210,103 @@ export default function InvestigationWorkspace() {
         </div>
       </header>
 
-      {/* Workspace Stepper Ribbon */}
+      {/* Mode Switcher & Stepper Ribbon */}
       <div className="bg-white border-b border-slate-200 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3 text-xs">
-        <div className="flex items-center gap-1 sm:gap-3 overflow-x-auto py-1">
-          {STAGES.map((stage, idx) => (
-            <React.Fragment key={stage.id}>
-              <div 
-                className={`flex items-center gap-1.5 cursor-pointer px-3 py-1.5 rounded-lg transition-all ${
-                  activeStage === idx 
-                    ? 'bg-indigo-50 text-indigo-700 font-bold border border-indigo-200 shadow-2xs' 
-                    : 'text-slate-500 hover:bg-slate-100'
-                }`}
-                onClick={() => setActiveStage(idx)}
-              >
-                {activeStage > idx ? (
-                  <CheckCircle2 size={14} className="text-emerald-500" />
-                ) : activeStage === idx ? (
-                  <Circle size={14} className="fill-indigo-600 text-indigo-600" />
-                ) : (
-                  <Circle size={14} />
-                )}
-                <span>{stage.id} {stage.name}</span>
-              </div>
-              {idx < STAGES.length - 1 && <ChevronRight size={14} className="text-slate-300" />}
-            </React.Fragment>
-          ))}
+        <div className="flex items-center gap-2">
+          {/* View Mode Toggle */}
+          <div className="inline-flex bg-slate-100 p-1 rounded-xl border border-slate-200 font-bold">
+            <button
+              onClick={() => setViewMode('step_by_step')}
+              className={`px-3 py-1 rounded-lg flex items-center gap-1.5 transition-all ${
+                viewMode === 'step_by_step' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <ListOrdered size={14} />
+              <span>Step-by-Step Analysis & AI Story</span>
+            </button>
+            <button
+              onClick={() => setViewMode('stage_inspect')}
+              className={`px-3 py-1 rounded-lg flex items-center gap-1.5 transition-all ${
+                viewMode === 'stage_inspect' ? 'bg-indigo-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Layers size={14} />
+              <span>Deep Stage Inspector</span>
+            </button>
+          </div>
+
+          {viewMode === 'stage_inspect' && (
+            <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto pl-3 border-l border-slate-200">
+              {STAGES.map((stage, idx) => (
+                <React.Fragment key={stage.id}>
+                  <div 
+                    className={`flex items-center gap-1.5 cursor-pointer px-2.5 py-1 rounded-lg transition-all ${
+                      activeStage === idx 
+                        ? 'bg-indigo-50 text-indigo-700 font-bold border border-indigo-200' 
+                        : 'text-slate-500 hover:bg-slate-100'
+                    }`}
+                    onClick={() => setActiveStage(idx)}
+                  >
+                    {activeStage > idx ? (
+                      <CheckCircle2 size={13} className="text-emerald-500" />
+                    ) : activeStage === idx ? (
+                      <Circle size={13} className="fill-indigo-600 text-indigo-600" />
+                    ) : (
+                      <Circle size={13} />
+                    )}
+                    <span>{stage.id} {stage.name}</span>
+                  </div>
+                  {idx < STAGES.length - 1 && <ChevronRight size={12} className="text-slate-300" />}
+                </React.Fragment>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-2">
-          <a
-            href="/sales.csv"
-            download="sales.csv"
-            className="px-3 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold rounded-lg text-xs transition-colors flex items-center gap-1"
-            title="Download test CSV file to test upload in Data Studio"
-          >
-            <Download size={12} />
-            <span>Download Sample CSV</span>
-          </a>
           <button
             onClick={() => navigate('/data-studio')}
-            className="px-3 py-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs transition-colors flex items-center gap-1 shadow-xs"
+            className="px-3.5 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg text-xs transition-colors flex items-center gap-1 shadow-xs"
           >
-            <Database size={12} />
-            <span>Data Studio</span>
+            <Database size={13} />
+            <span>Upload New CSV</span>
           </button>
         </div>
       </div>
 
-      {/* Main Workspace Area (Fully Scrollable) */}
-      <main className="flex-1 flex flex-col space-y-4 px-6 pt-4 max-w-7xl mx-auto w-full">
-        {/* Top visual pipeline execution viewer */}
-        <div>
-          <PipelineExecutionViewer pipelineData={investigation.pipelineExecution} />
-        </div>
-
-        {/* Stage Content */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
-          <ActiveComponent 
-            investigation={investigation} 
-            onNext={() => {
-              setActiveStage(s => Math.min(STAGES.length - 1, s + 1));
-              window.scrollTo({ top: 300, behavior: 'smooth' });
-            }} 
+      {/* Main Workspace Area */}
+      <main className="flex-1 flex flex-col space-y-6 px-6 pt-6 max-w-7xl mx-auto w-full">
+        {viewMode === 'step_by_step' ? (
+          <StepByStepAnalysisView
+            analysis={investigation}
+            onOpenLLMSettings={() => setShowLLMModal(true)}
+            onNavigateToFullWorkspace={() => setViewMode('stage_inspect')}
           />
-        </div>
+        ) : (
+          <div className="space-y-4">
+            {/* Visual Pipeline Viewer */}
+            <PipelineExecutionViewer pipelineData={investigation.pipelineExecution} />
 
-        {/* Analyst Feedback & Score Calibration Card */}
-        <div className="pt-2">
-          <FeedbackCard
-            investigationId={investigation.analysisId || investigation.id}
-            onFeedbackSubmitted={() => {
-              console.log('Feedback registered successfully');
-            }}
-          />
-        </div>
+            {/* Stage Content */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden">
+              <ActiveComponent 
+                investigation={investigation} 
+                onNext={() => {
+                  setActiveStage(s => Math.min(STAGES.length - 1, s + 1));
+                  window.scrollTo({ top: 300, behavior: 'smooth' });
+                }} 
+              />
+            </div>
+
+            {/* Analyst Feedback */}
+            <FeedbackCard
+              investigationId={investigation.analysisId || investigation.id}
+              onFeedbackSubmitted={() => {
+                console.log('Feedback registered successfully');
+              }}
+            />
+          </div>
+        )}
       </main>
 
       {/* Data Lineage Modal */}
@@ -308,6 +321,13 @@ export default function InvestigationWorkspace() {
         isOpen={showTelemetry}
         onClose={() => setShowTelemetry(false)}
         telemetry={investigation.telemetry}
+      />
+
+      {/* LLM Config Modal */}
+      <LLMConfigModal
+        isOpen={showLLMModal}
+        onClose={() => setShowLLMModal(false)}
+        onConfigSaved={(cfg) => setLLMConfig(cfg)}
       />
     </div>
   );

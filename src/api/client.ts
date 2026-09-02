@@ -24,8 +24,27 @@ export const mapDataset = (id: string, payload: { kpi?: string; columnMapping?: 
   apiClient.post(`/datasets/${id}/map`, payload).then(res => res.data.data);
 
 // Analysis Engine
-export const runAnalysis = (payload: { datasetId?: string; kpi?: string; columnMapping?: any; persona?: string; scenarioKey?: string }) =>
+export const runAnalysis = (payload: { 
+  datasetId?: string; 
+  kpi?: string; 
+  columnMapping?: any; 
+  persona?: string; 
+  scenarioKey?: string;
+  rawContent?: string;
+  filename?: string;
+  llmConfig?: any;
+}) =>
   apiClient.post('/analysis/run', payload).then(res => res.data.data);
+
+// LLM Engine Configuration & Testing
+export const fetchLLMConfig = () =>
+  apiClient.get('/llm/config').then(res => res.data.data);
+
+export const saveLLMConfig = (config: any) =>
+  apiClient.post('/llm/config', config).then(res => res.data);
+
+export const testLLMConnection = (payload: any) =>
+  apiClient.post('/llm/test', payload).then(res => res.data);
 
 export const fetchAnalysis = (id: string, role = 'Data Analyst') =>
   apiClient.get(`/analysis/${id}`, { headers: { 'x-role': role } }).then(res => res.data.data);

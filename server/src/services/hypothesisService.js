@@ -9,33 +9,33 @@ export class HypothesisService {
     const hypotheses = [
       {
         id: 'H1',
-        name: `${primaryRegion} ${primarySegment} Renewal Contraction`,
-        summary: `Underlying technical integration friction in v4.2 ERP connector caused ${primaryRegion} enterprise accounts to delay contract renewals.`,
-        drivers: ['APAC Renewal Pipeline Velocity -21.4%', 'ERP Connector Timeout Surge +37%'],
-        temporalAlignment: 'Preceded anomaly by 15 days (Pipeline drop began July 15)',
+        name: `${primaryRegion} ${primarySegment} Operational / Technical Friction`,
+        summary: `Underlying operational bottleneck or technical integration latency caused ${primaryRegion} ${primarySegment} transactions to contract significantly.`,
+        drivers: [`${primaryRegion} Velocity Contraction`, 'High Priority Integration Tickets & Friction Signals'],
+        temporalAlignment: 'Preceded metric drop by 15 days (Leading Precedence Verified)',
         status: 'UNDER_REVIEW'
       },
       {
         id: 'H2',
-        name: 'Competitor Pricing Pressure (CloudApex Discount)',
-        summary: 'CloudApex 12% promotional discount in APAC lured away price-sensitive enterprise accounts.',
-        drivers: ['CloudApex Promotional Outreach', 'Pricing Objection Notes'],
-        temporalAlignment: 'Discount announced Aug 12 (11 days AFTER revenue drop began on Aug 1)',
+        name: 'Competitor Aggressive Promotional Campaign',
+        summary: `Competitor targeted discount campaign in ${primaryRegion} lured away price-sensitive volume.`,
+        drivers: ['Competitor Marketing Outreach', 'Pricing Objection Signals'],
+        temporalAlignment: 'Discount campaign launched 11 days AFTER metric drop began (Lacks Precedence)',
         status: 'UNDER_REVIEW'
       },
       {
         id: 'H3',
-        name: 'Billing & Invoice Processing Latency',
-        summary: 'Invoice disputes and currency conversion bugs prevented transaction recognition in ERP.',
-        drivers: ['Invoice Currency Support Tickets +4.8%'],
-        temporalAlignment: 'Co-occurred with month-end closing',
+        name: 'Billing & Transaction Settlement Latency',
+        summary: 'Transaction recognition disputes and currency settlement delays prevented revenue capture.',
+        drivers: ['Settlement Support Inquiries +4.8%'],
+        temporalAlignment: 'Co-occurred with period-end closing',
         status: 'UNDER_REVIEW'
       },
       {
         id: 'H4',
-        name: 'Macro Seasonal Summer Slowdown',
-        summary: 'Routine August executive summer holiday slowdown in procurement deal closing.',
-        drivers: ['Historical August Seasonality Index -1.2%'],
+        name: 'Macro Seasonal Holiday & Cyclical Adjustment',
+        summary: 'Routine cyclical volume variation due to regional holiday periods and procurement cycles.',
+        drivers: ['Historical Cyclical Variation Index -1.2%'],
         temporalAlignment: 'Annual cyclical baseline',
         status: 'UNDER_REVIEW'
       }

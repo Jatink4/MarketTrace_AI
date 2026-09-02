@@ -50,4 +50,9 @@ router.get('/telemetry/:analysisId', PipelineController.getTelemetry);
 router.get('/audit', PipelineController.getAuditLogs);
 router.get('/kpis', PipelineController.getKPIs);
 
+// LLM Engine Configuration & Live Test
+router.get('/llm/config', PipelineController.getLLMConfig);
+router.post('/llm/config', PipelineController.setLLMConfig);
+router.post('/llm/test', PipelineController.testLLMConnection);
+
 export default router;

@@ -1,27 +1,55 @@
 import { calculateZScore, calculateAnomalyScore } from '../utils/mathUtils.js';
 import { SemanticLayer } from '../semantic/kpiRegistry.js';
 
+function formatDisplayMetric(val, unit = '$') {
+  if (val === null || val === undefined || isNaN(val)) return `${unit}0`;
+  const abs = Math.abs(val);
+  const sign = val < 0 ? '-' : '';
+  if (abs >= 1000000) {
+    return `${sign}${unit}${(abs / 1000000).toFixed(2)}M`;
+  }
+  if (abs >= 1000) {
+    return `${sign}${unit}${(abs / 1000).toFixed(1)}K`;
+  }
+  return `${sign}${unit}${abs.toFixed(2)}`;
+}
+
 export class ChangeDetectionService {
   /**
    * Run deterministic anomaly detection on mapped dataset rows
    */
-  static detectAnomaly(rows, mapping, kpiName = 'Revenue') {
+  static detectAnomaly(rows, mapping = {}, kpiName = 'Revenue') {
     const contract = SemanticLayer.getContract(kpiName);
     const metricCol = mapping.metric || 'revenue';
     const dateCol = mapping.date || 'date';
+    const unit = contract.unit || '$';
 
     if (!rows || rows.length === 0) {
       return this.getDefaultAnomaly(contract);
     }
 
-    // Aggregate monthly/daily periods
+    // Flexible Date Grouping (Monthly or Weekly)
     const periods = {};
     rows.forEach(r => {
       const dateVal = r[dateCol];
       if (!dateVal) return;
-      const dateStr = String(dateVal).substring(0, 7); // YYYY-MM
-      const amount = Number(r[metricCol]) || 0;
 
+      let dateStr = String(dateVal).trim();
+      // If full date like YYYY-MM-DD or YYYY/MM/DD
+      if (/^\d{4}[-/]\d{1,2}/.test(dateStr)) {
+        dateStr = dateStr.substring(0, 7).replace('/', '-');
+      } else if (/^\d{1,2}[-/]\d{1,2}[-/]\d{4}/.test(dateStr)) {
+        // e.g. MM/DD/YYYY
+        const parts = dateStr.split(/[-/]/);
+        if (parts.length === 3 && parts[2].length === 4) {
+          const m = parts[0].padStart(2, '0');
+          dateStr = `${parts[2]}-${m}`;
+        }
+      } else {
+        dateStr = dateStr.substring(0, 7);
+      }
+
+      const amount = Number(r[metricCol]) || 0;
       if (!periods[dateStr]) {
         periods[dateStr] = { period: dateStr, total: 0, count: 0 };
       }
@@ -31,16 +59,19 @@ export class ChangeDetectionService {
 
     const periodKeys = Object.keys(periods).sort();
     if (periodKeys.length < 2) {
-      // Fallback to splitting rows into baseline and current window
-      return this.detectAnomalyFromSinglePeriod(rows, metricCol, contract);
+      return this.detectAnomalyFromSinglePeriod(rows, metricCol, contract, unit);
     }
 
-    // Timeseries data
+    // Determine scale for chart visualization
+    const maxVal = Math.max(...periodKeys.map(k => periods[k].total));
+    const divisor = maxVal >= 1000000 ? 1000000 : maxVal >= 1000 ? 1000 : 1;
+    const suffix = maxVal >= 1000000 ? 'M' : maxVal >= 1000 ? 'K' : '';
+
     const series = periodKeys.map(k => {
       const p = periods[k];
       return {
         month: k,
-        actual: Number((p.total / 1000000).toFixed(2)),
+        actual: Number((p.total / divisor).toFixed(2)),
         rawTotal: p.total
       };
     });
@@ -48,43 +79,44 @@ export class ChangeDetectionService {
     const currentPeriod = series[series.length - 1];
     const historicalPeriods = series.slice(0, series.length - 1);
 
-    // Compute baseline mean & standard deviation
-    const histValues = historicalPeriods.map(h => h.actual);
-    const mean = histValues.reduce((a, b) => a + b, 0) / histValues.length;
-    const variance = histValues.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / (histValues.length || 1);
-    const stdDev = Math.sqrt(variance) || 0.12;
+    // Baseline calculation on exact raw values
+    const histRaw = historicalPeriods.map(h => h.rawTotal);
+    const meanRaw = histRaw.reduce((a, b) => a + b, 0) / (histRaw.length || 1);
+    const varianceRaw = histRaw.reduce((a, b) => a + Math.pow(b - meanRaw, 2), 0) / (histRaw.length || 1);
+    const stdDevRaw = Math.sqrt(varianceRaw) || (meanRaw * 0.05) || 1;
 
-    const actualVal = currentPeriod.actual;
-    const changePct = Number((((actualVal - mean) / mean) * 100).toFixed(1));
-    const zScore = calculateZScore(actualVal, mean, stdDev);
-    const anomalyScore = calculateAnomalyScore(actualVal, mean, stdDev);
+    const actualRaw = currentPeriod.rawTotal;
+    const changePct = meanRaw > 0 ? Number((((actualRaw - meanRaw) / meanRaw) * 100).toFixed(1)) : 0;
+    const zScore = Number(calculateZScore(actualRaw, meanRaw, stdDevRaw).toFixed(2));
+    const anomalyScore = calculateAnomalyScore(actualRaw, meanRaw, stdDevRaw);
 
-    // Populate expected and confidence bounds on series
+    const meanChart = Number((meanRaw / divisor).toFixed(2));
+    const stdDevChart = Number((stdDevRaw / divisor).toFixed(2)) || 0.1;
+
     const enrichedSeries = series.map((s, idx) => {
       const isCurrent = idx === series.length - 1;
       return {
         month: s.month,
         actual: s.actual,
-        expected: Number(mean.toFixed(2)),
-        minExpected: Number((mean - (1.96 * stdDev)).toFixed(2)),
-        maxExpected: Number((mean + (1.96 * stdDev)).toFixed(2)),
+        expected: meanChart,
+        minExpected: Number((meanChart - (1.96 * stdDevChart)).toFixed(2)),
+        maxExpected: Number((meanChart + (1.96 * stdDevChart)).toFixed(2)),
         range: [
-          Number((mean - (1.96 * stdDev)).toFixed(2)),
-          Number((mean + (1.96 * stdDev)).toFixed(2))
+          Number((meanChart - (1.96 * stdDevChart)).toFixed(2)),
+          Number((meanChart + (1.96 * stdDevChart)).toFixed(2))
         ],
-        isAnomaly: isCurrent && Math.abs(zScore) >= 2.0
+        isAnomaly: isCurrent && Math.abs(zScore) >= 1.5
       };
     });
 
-    // Materiality Assessment
     let materialityLevel = 'LOW';
     let severity = 'MINOR_MOVEMENT';
 
     const absDev = Math.abs(changePct);
-    if (absDev >= contract.materialityThreshold && Math.abs(zScore) >= 2.5) {
+    if (absDev >= (contract.materialityThreshold || 5) && Math.abs(zScore) >= 2.0) {
       materialityLevel = 'HIGH';
       severity = 'CRITICAL_MOVEMENT';
-    } else if (absDev >= contract.alertThreshold || Math.abs(zScore) >= 1.8) {
+    } else if (absDev >= (contract.alertThreshold || 2) || Math.abs(zScore) >= 1.5) {
       materialityLevel = 'MEDIUM';
       severity = 'MATERIAL_MOVEMENT';
     } else {
@@ -92,11 +124,14 @@ export class ChangeDetectionService {
       severity = 'NORMAL_VARIATION';
     }
 
+    const currDisplay = formatDisplayMetric(actualRaw, unit);
+    const prevDisplay = formatDisplayMetric(meanRaw, unit);
+
     const businessEvent = {
       eventType: 'KPI_ANOMALY',
-      kpi: contract.name,
-      currentValue: `$${actualVal}M`,
-      previousValue: `$${mean.toFixed(2)}M`,
+      kpi: contract.name || kpiName,
+      currentValue: currDisplay,
+      previousValue: prevDisplay,
       changePercent: changePct,
       deviation: `${changePct}%`,
       zScore,
@@ -106,16 +141,16 @@ export class ChangeDetectionService {
       detectedAt: new Date().toISOString(),
       method: 'Z-score (95% CI) + Historical Baseline Aggregation',
       source: 'Ingested Dataset',
-      calculation: `(Actual $${actualVal}M - Baseline $${mean.toFixed(2)}M) / Baseline = ${changePct}% (Z = ${zScore})`
+      calculation: `(Actual ${currDisplay} - Baseline ${prevDisplay}) / Baseline = ${changePct}% (Z = ${zScore})`
     };
 
     return {
       businessEvent,
       series: enrichedSeries,
-      baselineMean: Number(mean.toFixed(2)),
-      stdDev: Number(stdDev.toFixed(2)),
-      currentValue: `$${actualVal}M`,
-      previousValue: `$${mean.toFixed(2)}M`,
+      baselineMean: meanChart,
+      stdDev: stdDevChart,
+      currentValue: currDisplay,
+      previousValue: prevDisplay,
       changePct,
       zScore,
       anomalyScore,
@@ -124,7 +159,7 @@ export class ChangeDetectionService {
     };
   }
 
-  static detectAnomalyFromSinglePeriod(rows, metricCol, contract) {
+  static detectAnomalyFromSinglePeriod(rows, metricCol, contract, unit = '$') {
     const half = Math.floor(rows.length * 0.7);
     const baselineRows = rows.slice(0, half);
     const currentRows = rows.slice(half);
@@ -132,36 +167,51 @@ export class ChangeDetectionService {
     const baseSum = baselineRows.reduce((a, b) => a + (Number(b[metricCol]) || 0), 0);
     const currSum = currentRows.reduce((a, b) => a + (Number(b[metricCol]) || 0), 0);
 
-    const baseNorm = (baseSum / baselineRows.length) * 30 / 1000000;
-    const currNorm = (currSum / currentRows.length) * 30 / 1000000;
+    const baseDailyAvg = baselineRows.length > 0 ? (baseSum / baselineRows.length) : 1;
+    const currDailyAvg = currentRows.length > 0 ? (currSum / currentRows.length) : 1;
 
-    const changePct = Number((((currNorm - baseNorm) / baseNorm) * 100).toFixed(1));
-    const zScore = -2.85;
-    const anomalyScore = 88;
+    // Normalize to equal period window
+    const baseNorm = baseDailyAvg * 30;
+    const currNorm = currDailyAvg * 30;
+
+    const changePct = baseNorm > 0 ? Number((((currNorm - baseNorm) / baseNorm) * 100).toFixed(1)) : 0;
+    
+    // Compute variance in baseline
+    const baseVariance = baselineRows.reduce((a, b) => a + Math.pow((Number(b[metricCol]) || 0) - baseDailyAvg, 2), 0) / (baselineRows.length || 1);
+    const baseStdDev = Math.sqrt(baseVariance) || (baseDailyAvg * 0.1) || 1;
+    const zScore = Number(((currDailyAvg - baseDailyAvg) / (baseStdDev / Math.sqrt(currentRows.length || 1))).toFixed(2));
+    const anomalyScore = Math.min(99, Math.max(40, Math.round(Math.abs(zScore) * 28)));
+
+    const currDisplay = formatDisplayMetric(currNorm, unit);
+    const prevDisplay = formatDisplayMetric(baseNorm, unit);
+
+    const divisor = currNorm >= 1000000 ? 1000000 : currNorm >= 1000 ? 1000 : 1;
+    const baseChart = Number((baseNorm / divisor).toFixed(2));
+    const currChart = Number((currNorm / divisor).toFixed(2));
 
     return {
       businessEvent: {
         eventType: 'KPI_ANOMALY',
         kpi: contract.name,
-        currentValue: `$${currNorm.toFixed(2)}M`,
-        previousValue: `$${baseNorm.toFixed(2)}M`,
+        currentValue: currDisplay,
+        previousValue: prevDisplay,
         changePercent: changePct,
-        severity: 'HIGH',
-        materialityLevel: 'HIGH',
+        severity: Math.abs(changePct) >= 5 ? 'HIGH' : 'MEDIUM',
+        materialityLevel: Math.abs(changePct) >= 5 ? 'HIGH' : 'MEDIUM',
         detectedAt: new Date().toISOString(),
         method: 'Partitioned Baseline Comparison'
       },
       series: [
-        { month: 'Historical Baseline', actual: Number(baseNorm.toFixed(2)), expected: Number(baseNorm.toFixed(2)), range: [baseNorm * 0.95, baseNorm * 1.05] },
-        { month: 'Observed Current', actual: Number(currNorm.toFixed(2)), expected: Number(baseNorm.toFixed(2)), range: [baseNorm * 0.95, baseNorm * 1.05], isAnomaly: true }
+        { month: 'Historical Baseline', actual: baseChart, expected: baseChart, range: [baseChart * 0.95, baseChart * 1.05] },
+        { month: 'Observed Current', actual: currChart, expected: baseChart, range: [baseChart * 0.95, baseChart * 1.05], isAnomaly: Math.abs(changePct) >= 5 }
       ],
-      currentValue: `$${currNorm.toFixed(2)}M`,
-      previousValue: `$${baseNorm.toFixed(2)}M`,
+      currentValue: currDisplay,
+      previousValue: prevDisplay,
       changePct,
       zScore,
       anomalyScore,
-      severity: 'HIGH',
-      materialityLevel: 'HIGH'
+      severity: Math.abs(changePct) >= 5 ? 'HIGH' : 'MEDIUM',
+      materialityLevel: Math.abs(changePct) >= 5 ? 'HIGH' : 'MEDIUM'
     };
   }
 
@@ -169,7 +219,7 @@ export class ChangeDetectionService {
     return {
       businessEvent: {
         eventType: 'KPI_ANOMALY',
-        kpi: contract.name,
+        kpi: contract.name || 'Revenue',
         currentValue: '$4.82M',
         previousValue: '$5.25M',
         changePercent: -8.2,

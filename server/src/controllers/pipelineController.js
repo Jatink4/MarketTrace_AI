@@ -6,6 +6,7 @@ import { PipelineOrchestrator } from '../services/pipelineOrchestrator.js';
 import { FeedbackService } from '../services/feedbackService.js';
 import { TelemetryService, AuditService } from '../services/telemetryService.js';
 import { SemanticLayer } from '../semantic/kpiRegistry.js';
+import { LLMService } from '../services/llmService.js';
 
 export class PipelineController {
   // Datasets
@@ -122,15 +123,45 @@ export class PipelineController {
     }
   }
 
+  // LLM Engine Configuration & Live Test
+  static getLLMConfig(req, res, next) {
+    try {
+      res.json({ success: true, data: LLMService.getConfig() });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static setLLMConfig(req, res, next) {
+    try {
+      const config = LLMService.setConfig(req.body);
+      res.json({ success: true, data: config, message: 'LLM settings updated successfully.' });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async testLLMConnection(req, res, next) {
+    try {
+      const result = await LLMService.testConnection(req.body);
+      res.json(result);
+    } catch (err) {
+      next(err);
+    }
+  }
+
   // Analysis Execution
   static async runAnalysis(req, res, next) {
     try {
-      const { datasetId, kpi, columnMapping, persona, scenarioKey } = req.body;
+      const { datasetId, kpi, columnMapping, persona, scenarioKey, rawContent, filename, llmConfig } = req.body;
       const analysis = await PipelineOrchestrator.runAnalysis(datasetId, {
         kpi: kpi || 'Revenue',
         columnMapping,
         persona: persona || 'executive',
         scenarioKey,
+        rawContent,
+        filename,
+        llmConfig,
         user: req.headers['x-user'] || 'Alex Morgan',
         role: req.headers['x-role'] || 'Data Analyst'
       });

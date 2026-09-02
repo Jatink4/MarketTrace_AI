@@ -1,23 +1,20 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import LandingPage from './pages/LandingPage';
+import DataStudioPage from './pages/DataStudioPage';
 import IntelligenceDashboard from './pages/IntelligenceDashboard';
 import InvestigationWorkspace from './pages/InvestigationWorkspace';
-import DataStudioPage from './pages/DataStudioPage';
-import { GovernancePage } from './pages/GovernancePage';
-import { FeedbackPage } from './pages/FeedbackPage';
+import LandingPage from './pages/LandingPage';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/dashboard" element={<IntelligenceDashboard />} />
+        <Route path="/" element={<DataStudioPage />} />
         <Route path="/data-studio" element={<DataStudioPage />} />
+        <Route path="/dashboard" element={<IntelligenceDashboard />} />
         <Route path="/investigation/:id" element={<InvestigationWorkspace />} />
         <Route path="/investigation" element={<InvestigationWorkspace />} />
-        <Route path="/governance" element={<GovernancePage />} />
-        <Route path="/feedback" element={<FeedbackPage />} />
+        <Route path="/landing" element={<LandingPage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

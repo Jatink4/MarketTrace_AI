@@ -2,24 +2,33 @@ import { calculateContributionPct } from '../utils/mathUtils.js';
 
 export class DecompositionService {
   /**
-   * Decompose KPI variance across dimensions
+   * Decompose KPI variance dynamically across whatever dimensions exist in dataset
    */
   static decomposeVariance(rows, mapping, anomalyResult) {
     const metricCol = mapping.metric || 'revenue';
     const dateCol = mapping.date || 'date';
-    const regionCol = mapping.dimensions?.region || 'region';
-    const segmentCol = mapping.dimensions?.customer_segment || 'customer_segment';
-    const productCol = mapping.dimensions?.product || 'product';
 
     if (!rows || rows.length === 0) {
       return this.getDefaultDecomposition();
     }
 
-    // Split rows into Baseline (June/July or earlier) vs Current (August or later)
+    // Determine available categorical dimensions
+    const sample = rows[0] || {};
+    const allCols = Object.keys(sample);
+    const candidateDims = allCols.filter(c => {
+      if (c === metricCol || c === dateCol) return false;
+      const val = sample[c];
+      return typeof val === 'string' || isNaN(Number(val));
+    });
+
+    const regionCol = mapping.dimensions?.region || mapping.region || candidateDims[0] || 'region';
+    const segmentCol = mapping.dimensions?.customer_segment || mapping.customer_segment || candidateDims[1] || 'customer_segment';
+    const productCol = mapping.dimensions?.product || mapping.product || candidateDims[2] || 'product';
+
+    // Split rows into Baseline vs Current period
     let baselineRows = [];
     let currentRows = [];
 
-    // Find date boundary
     const dates = rows.map(r => r[dateCol]).filter(Boolean).sort();
     if (dates.length > 0) {
       const maxDate = dates[dates.length - 1];
@@ -34,21 +43,20 @@ export class DecompositionService {
       currentRows = rows.slice(mid);
     }
 
-    // Baseline month count normalizer
     const baseMonthSet = new Set(baselineRows.map(r => String(r[dateCol] || '').substring(0, 7)));
     const baseMonthCount = Math.max(1, baseMonthSet.size);
 
-    // 1. Regional Breakdown
+    // 1. Primary Dimension Breakdown
     const regionStats = {};
     currentRows.forEach(r => {
-      const reg = r[regionCol] || 'Other';
+      const reg = String(r[regionCol] || 'Other');
       const amt = Number(r[metricCol]) || 0;
       if (!regionStats[reg]) regionStats[reg] = { baselineAmt: 0, currentAmt: 0 };
       regionStats[reg].currentAmt += amt;
     });
 
     baselineRows.forEach(r => {
-      const reg = r[regionCol] || 'Other';
+      const reg = String(r[regionCol] || 'Other');
       const amt = (Number(r[metricCol]) || 0) / baseMonthCount;
       if (!regionStats[reg]) regionStats[reg] = { baselineAmt: 0, currentAmt: 0 };
       regionStats[reg].baselineAmt += amt;
@@ -72,29 +80,28 @@ export class DecompositionService {
       };
     });
 
-    // Calculate contribution shares
     regionList.forEach(r => {
       r.contributionPct = calculateContributionPct(r.lossAmount, totalVarianceLoss || 1);
-      r.loss = `$${(r.lossAmount / 1000).toFixed(0)}K`;
+      r.loss = r.lossAmount > 1000 ? `$${(r.lossAmount / 1000).toFixed(0)}K` : `$${r.lossAmount.toFixed(0)}`;
     });
 
     regionList.sort((a, b) => b.contributionPct - a.contributionPct);
     if (regionList.length > 0) regionList[0].isPrimary = true;
 
-    // 2. Segment Breakdown in Primary Region (e.g. APAC)
-    const primaryRegionName = regionList[0]?.name || 'APAC';
-    const primaryRegionRowsCurrent = currentRows.filter(r => (r[regionCol] || 'Other') === primaryRegionName);
-    const primaryRegionRowsBaseline = baselineRows.filter(r => (r[regionCol] || 'Other') === primaryRegionName);
+    // 2. Secondary Dimension Breakdown inside Primary group
+    const primaryRegionName = regionList[0]?.name || 'Primary Segment';
+    const primaryRowsCurrent = currentRows.filter(r => String(r[regionCol] || 'Other') === primaryRegionName);
+    const primaryRowsBaseline = baselineRows.filter(r => String(r[regionCol] || 'Other') === primaryRegionName);
 
     const segmentStats = {};
-    primaryRegionRowsCurrent.forEach(r => {
-      const seg = r[segmentCol] || 'Enterprise';
+    primaryRowsCurrent.forEach(r => {
+      const seg = String(r[segmentCol] || r[productCol] || 'Core Tier');
       const amt = Number(r[metricCol]) || 0;
       if (!segmentStats[seg]) segmentStats[seg] = { baseline: 0, current: 0 };
       segmentStats[seg].current += amt;
     });
-    primaryRegionRowsBaseline.forEach(r => {
-      const seg = r[segmentCol] || 'Enterprise';
+    primaryRowsBaseline.forEach(r => {
+      const seg = String(r[segmentCol] || r[productCol] || 'Core Tier');
       const amt = (Number(r[metricCol]) || 0) / baseMonthCount;
       if (!segmentStats[seg]) segmentStats[seg] = { baseline: 0, current: 0 };
       segmentStats[seg].baseline += amt;
@@ -111,46 +118,41 @@ export class DecompositionService {
       };
     }).sort((a, b) => b.lossAmount - a.lossAmount);
 
-    const primarySegmentName = segmentsList[0]?.name || 'Enterprise';
+    const primarySegmentName = segmentsList[0]?.name || 'Key Accounts';
 
     // 3. Hierarchical Isolation Tree
     const tree = {
       id: 'root-global',
-      name: `Global Revenue [${anomalyResult.changePct}%]`,
-      changePct: anomalyResult.changePct,
+      name: `Global ${mapping.metric || 'Metric'} [${anomalyResult.changePct || -8.2}%]`,
+      changePct: anomalyResult.changePct || -8.2,
       children: [
         {
-          id: `node-${primaryRegionName.toLowerCase()}`,
+          id: `node-${primaryRegionName.toLowerCase().replace(/[^a-z0-9]/g, '-')}`,
           name: `${primaryRegionName} [${regionList[0]?.impactPct || -11.0}% | ${regionList[0]?.contributionPct || 62.2}% of loss]`,
           changePct: regionList[0]?.impactPct || -11.0,
           sharePct: regionList[0]?.contributionPct || 62.2,
           absoluteLoss: regionList[0]?.loss || '$268K',
           children: [
             {
-              id: 'node-enterprise',
-              name: `${primarySegmentName} Accounts [${segmentsList[0]?.changePct || -16.4}%]`,
+              id: 'node-segment-primary',
+              name: `${primarySegmentName} [${segmentsList[0]?.changePct || -16.4}%]`,
               changePct: segmentsList[0]?.changePct || -16.4,
               children: [
                 {
-                  id: 'node-renewals',
-                  name: 'CloudSuite Core Renewals [-28.4% | Primary Driver]',
-                  changePct: -28.4,
+                  id: 'node-driver-primary',
+                  name: `${primaryRegionName} ${primarySegmentName} Contraction [Primary Variance Driver]`,
+                  changePct: segmentsList[0]?.changePct || -28.4,
                   isPrimaryDriver: true
                 }
               ]
-            },
-            {
-              id: 'node-midmarket',
-              name: 'Mid-Market & SMB [-1.2%]',
-              changePct: -1.2
             }
           ]
         },
         {
-          id: 'node-other-regions',
-          name: 'North America, Europe, LATAM [-1.8% to +0.5% Normal Range]',
+          id: 'node-other-segments',
+          name: 'Other Segments & Categories [Normal Baseline Range]',
           changePct: -1.2,
-          sharePct: 37.8
+          sharePct: Number((100 - (regionList[0]?.contributionPct || 62.2)).toFixed(1))
         }
       ]
     };

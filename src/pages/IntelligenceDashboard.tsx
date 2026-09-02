@@ -60,59 +60,27 @@ export default function IntelligenceDashboard() {
         {/* Architectural Principle Banner */}
         <MethodologyBanner />
 
-        {/* 3 Ready Benchmark Scenarios Banner */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-xs space-y-3">
-          <div className="flex items-center justify-between">
+        {/* Upload Dataset Callout */}
+        <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white p-6 rounded-2xl shadow-xs flex flex-wrap items-center justify-between gap-4">
+          <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <Sparkles className="text-indigo-600" size={18} />
-              <h3 className="font-bold text-sm text-slate-900">Competition Benchmark Scenarios (1-Click Run)</h3>
+              <span className="text-[10px] font-mono font-bold bg-indigo-500/30 text-indigo-300 px-2.5 py-0.5 rounded border border-indigo-400/30">
+                DYNAMIC ROOT-CAUSE ENGINE
+              </span>
+              <h3 className="text-base font-bold">Upload Any Business CSV Dataset to Analyze</h3>
             </div>
-            <span className="text-xs text-slate-400 font-mono">3 Scenarios Configured</span>
+            <p className="text-xs text-slate-300">
+              Drag and drop your transaction, sales, or operational data to instantly detect anomalies, isolate drivers, and generate an AI root cause explanation.
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-            <div 
-              onClick={() => navigate('/investigation/inv-novacommerce-01')}
-              className="p-3.5 bg-slate-50 border border-slate-200 hover:border-indigo-400 rounded-xl cursor-pointer transition-all hover:bg-indigo-50/30 space-y-1"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-red-700 bg-red-50 border border-red-200 px-2 py-0.5 rounded">
-                  SCENARIO A (HIGH CONFIDENCE)
-                </span>
-                <span className="text-xs font-bold text-slate-900">87% Conf</span>
-              </div>
-              <h4 className="font-bold text-xs text-slate-900 pt-1">August Revenue Contraction (-8.2%)</h4>
-              <p className="text-[11px] text-slate-500">APAC Enterprise Renewal Decline isolated as root cause.</p>
-            </div>
-
-            <div 
-              onClick={() => navigate('/investigation/inv-ambiguous-02')}
-              className="p-3.5 bg-slate-50 border border-slate-200 hover:border-amber-400 rounded-xl cursor-pointer transition-all hover:bg-amber-50/30 space-y-1"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-amber-800 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded">
-                  SCENARIO B (ABSTAIN)
-                </span>
-                <span className="text-xs font-bold text-amber-700">52% Conf</span>
-              </div>
-              <h4 className="font-bold text-xs text-slate-900 pt-1">Balanced Revenue Shift (-6.1%)</h4>
-              <p className="text-[11px] text-slate-500">Multiple competing factors; engine abstains responsibly.</p>
-            </div>
-
-            <div 
-              onClick={() => navigate('/investigation/inv-sparse-03')}
-              className="p-3.5 bg-slate-50 border border-slate-200 hover:border-blue-400 rounded-xl cursor-pointer transition-all hover:bg-blue-50/30 space-y-1"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] font-mono font-bold text-blue-800 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded">
-                  SCENARIO C (SPARSE HISTORY)
-                </span>
-                <span className="text-xs font-bold text-blue-700">58% Conf</span>
-              </div>
-              <h4 className="font-bold text-xs text-slate-900 pt-1">NexusAI Launch Revenue (18 Days)</h4>
-              <p className="text-[11px] text-slate-500">Sparse baseline fallback to comparative peer group.</p>
-            </div>
-          </div>
+          <button
+            onClick={() => navigate('/data-studio')}
+            className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs flex items-center gap-2 shadow-md transition-all active:scale-95"
+          >
+            <Database size={15} />
+            <span>Open Data Studio (Upload CSV)</span>
+          </button>
         </div>
 
         {/* Top KPIs */}
